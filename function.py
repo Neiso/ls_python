@@ -2,8 +2,10 @@ import os
 import stat
 from pwd import getpwuid
 import datetime
+from operator import itemgetter
 
 def find_prefix(dir_path):
+    """Split the given path to get parent path and child prefix."""
     dirs = dir_path.split("/")
     boolean = False
     if len(dirs) == 2:
@@ -16,37 +18,48 @@ def find_prefix(dir_path):
         child = dirs[-1]
     try:
         directory_list = os.listdir(parent_dir)
-        for items in directory_list :
-            if items.startswith(child):
-                print(items, end="  ")
-                boolean = True
-        if boolean:
-            print()
-        else :
-            print("No file or directory found matching prefix.")
-        return (1)
+        return directory_list, child, parent_dir
     except OSError as err:
-        return (0)
+        print(err)
+        exit()
 
 
 def get_dir_items(directory_path):
     """ 
-        READ THE FOLDER PATH GIVEN AND RETRIEVES ALL FILES + DIR NAMES. 
-        IF THE DIRECTORY IS NOT FIND, IT RAISES AN OSError WHICH LEADS TO
-        A SEARCH FOR PREFIX.    
+        Read the folder path given and retrieves all files + dir names. 
+        Ff the directory is not find, it raises an oserror which leads to
+        a search for prefix. If the prefix didn't match, it simply display the
+        error and exit. If the prefix did match, it returns a list of items containing
+        all the matching items.
     """
     try:
         directory_list = os.listdir(directory_path)
-        return directory_list
+        return directory_list, directory_path
     except OSError as err:
-        if(not find_prefix(directory_path)):
+        directory_list, child, directory_path = find_prefix(directory_path)
+        if(not directory_list):
             print("An error occured while checking for the directory: \n\t" + str(err))
-        exit()
+            exit()
+        else :
+            return_list = []
+            for items in directory_list :
+                if items.startswith(child):
+                    return_list.append(items)
+            if len(return_list) >= 1:
+                return return_list, directory_path
+            else :
+                print("No matching found with the prefix.")
+                exit()
 
 def ls_list(directory_path):
+    """
+        Get all information from files using os.stat module.
+        Then display it properly with correct amount of space in between
+        parts and in alphabetical order.
+    """
+    items, directory_path = get_dir_items(directory_path)
     if (directory_path[-1] != "/"):
         directory_path += "/"
-    items = get_dir_items(directory_path)
     items_desc = []
     for item in items:
         item_desc = []
@@ -62,6 +75,7 @@ def ls_list(directory_path):
         item_desc.append(f"{date:%Y-%m-%d %H:%M}")    
         item_desc.append(item)
         items_desc.append(item_desc)
+    items_desc = sorted(items_desc, key=lambda x: x[6].lower())
     link_size = 0
     id_size = 0
     group_size = 0
