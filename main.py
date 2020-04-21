@@ -2,34 +2,39 @@ import os
 import sys
 from function import *
 
-""" READ THE ARGV FROM CONSOLE INPUT"""
+def ls():
+    """basic ls function. Check the README.md for more information."""
+    
 
-try :    
-    if len(sys.argv) == 2:
-        directory_path = sys.argv[1]
-    elif len(sys.argv) == 3:
-        directory_path = sys.argv[2]
-    elif len(sys.argv) == 1:
-        directory_path = os.getcwd()
-    else :
-        raise ValueError("Too many arguments given.")
-except ValueError as err :
-    print("An error occured : \n" + str(err))
-    exit()
+    """ READ THE ARGV FROM CONSOLE INPUT"""
+    try :    
+        if len(sys.argv) == 2 and sys.argv[1] != "-l":
+            directory_path = sys.argv[1]
+            directory_items = get_dir_items(directory_path)
+            for items in directory_items :
+                print(items, end='  ')
+            print("")
+        elif len(sys.argv) == 3:
+            if(sys.argv[1] != "-l"):
+                raise ValueError("Option " + sys.argv[1] + " not handled yet.")
+            directory_path = sys.argv[2]
+            ls_list(directory_path)
+        elif len(sys.argv) == 2 and sys.argv[1] == "-l":
+            directory_path = os.getcwd()
+            ls_list(directory_path)
+        elif len(sys.argv) == 1:
+            directory_path = os.getcwd()
+            directory_items = get_dir_items(directory_path)
+            for items in directory_items :
+                print(items, end='  ')
+            print("")
+        else :
+            raise ValueError("Too many arguments given.")
+    except ValueError as err :
+        print("An error occured while reading user's input : \n\t" + str(err))
+        return 0
+    
+    
 
-""" 
-    READ THE FOLDER PATH GIVEN AND RETRIEVES ALL FILES + DIR NAMES. 
-    IF THE DIRECTORY IS NOT FIND, IT RAISES AN OSError WHICH LEADS TO
-    A SEARCH FOR PREFIX.    
-"""
-
-
-try:
-    directory_list = os.listdir(directory_path)
-    for items in directory_list :
-        print(items, end='  ')
-    print("")
-except OSError as err:
-    if(not find_prefix(directory_path)):
-        print("An error occured : \n" + str(err))
-    exit()
+if __name__ == "__main__":
+    ls()
