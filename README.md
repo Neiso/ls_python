@@ -7,7 +7,7 @@ v0.1 features:
   - has an option "-l" to display the mode and the creation date of the files.
   
 Exemples :
-  - ls.py /path/to/folder/ :
+  - ls.py /path/to/folder/ :<br>
       some_file
       another_file
 
