@@ -19,11 +19,13 @@ def ls():
         it returns nothing.
     """
     try :    
+        return_list = ""
         if len(sys.argv) == 2 and sys.argv[1] != "-l":
             directory_path = sys.argv[1]
             directory_items, directory_path = get_dir_items(directory_path)
             for items in directory_items :
                 print(items, end='  ')
+                return_list += items + "  "
             if (len(directory_items) >= 1):
                 print("")
         elif len(sys.argv) == 3:
