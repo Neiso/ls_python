@@ -9,7 +9,10 @@ def find_prefix(dir_path):
     dirs = dir_path.split("/")
     boolean = False
     if len(dirs) == 2:
-        parent_dir = "/"
+        if dir_path[0:2] == "./":
+            parent_dir = os.getcwd()
+        else :
+            parent_dir = "/"
         child = dirs[-1]
     else :
         parent_dir = ""
@@ -27,7 +30,7 @@ def find_prefix(dir_path):
 def get_dir_items(directory_path):
     """ 
         Read the folder path given and retrieves all files + dir names. 
-        Ff the directory is not find, it raises an oserror which leads to
+        If the directory is not find, it raises an oserror which leads to
         a search for prefix. If the prefix didn't match, it simply display the
         error and exit. If the prefix did match, it returns a list of items containing
         all the matching items.
@@ -76,29 +79,39 @@ def ls_list(directory_path):
         item_desc.append(item)
         items_desc.append(item_desc)
     items_desc = sorted(items_desc, key=lambda x: x[6].lower())
-    link_size = 0
-    id_size = 0
-    group_size = 0
-    size_size = 0
-    date_size = 0
-    for item in items_desc:
-        if len(item[1]) > link_size:
-            link_size = len(item[1])
-        if len(item[2]) > id_size:
-            id_size = len(item[2])
-        if len(item[3]) > group_size:
-            group_size = len(item[3])
-        if len(item[4]) > size_size:
-            size_size = len(item[4])
-        if len(item[5]) > date_size:
-            date_size = len(item[5])
-    for item in items_desc:
-        output = ""
-        output += item[0]
-        output += (" " * (link_size - len(item[1]) + 1)) + item[1]
-        output += (" " * (id_size - len(item[2]) + 1)) + item[2]
-        output += (" " * (group_size - len(item[3]) + 1)) + item[3]
-        output += (" " * (size_size - len(item[4]) + 1)) + item[4]
-        output += (" " * (date_size - len(item[5]) + 1)) + item[5]
-        output += " " + item[6]
-        print(output)
+    return(items_desc)
+
+def display_items(items, l_arg):
+    if not l_arg:
+        for item in items :
+            print(item, end='  ')
+        if (len(items) >= 1):
+            print("")
+    elif l_arg:
+        link_size = 0
+        id_size = 0
+        group_size = 0
+        size_size = 0
+        date_size = 0
+        for item in items:
+            if len(item[1]) > link_size:
+                link_size = len(item[1])
+            if len(item[2]) > id_size:
+                id_size = len(item[2])
+            if len(item[3]) > group_size:
+                group_size = len(item[3])
+            if len(item[4]) > size_size:
+                size_size = len(item[4])
+            if len(item[5]) > date_size:
+                date_size = len(item[5])
+        for item in items:
+            output = ""
+            output += item[0]
+            output += (" " * (link_size - len(item[1]) + 1)) + item[1]
+            output += (" " * (id_size - len(item[2]) + 1)) + item[2]
+            output += (" " * (group_size - len(item[3]) + 1)) + item[3]
+            output += (" " * (size_size - len(item[4]) + 1)) + item[4]
+            output += (" " * (date_size - len(item[5]) + 1)) + item[5]
+            output += " " + item[6]
+            print(output)
+
