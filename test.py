@@ -45,7 +45,7 @@ class Testls(unittest.TestCase):
         output = subprocess.check_output("python3 ls.py -l", shell=True)
         expected = "drwxr-xr-x 8 djulian djulian 4096 2020-04-22 12:18 .git\ndrwxr-xr-x 2 djulian djulian 4096 2020-04-22 12:16 __pycache__\n-rw-r--r-- 1 djulian djulian 4135 2020-04-22 12:15 function.py\n-rwxr-xr-x 1 djulian djulian 2045 2020-04-22 12:14 ls.py\n-rw-r--r-- 1 djulian djulian  512 2020-04-21 12:33 README.md\n-rwxr-xr-x 1 djulian djulian 5703 2020-04-22 12:20 test.py\ndrwxr-xr-x 4 djulian djulian 4096 2020-04-22 10:49 tests\n"
         output2 = subprocess.check_output("python3 ls.py -l ./tests", shell=True)
-        expected2 = "drwxr-xr-x 3 djulian djulian 4096 2020-04-22 10:51 path\ndrwxr-xr-x 2 djulian djulian 4096 2020-04-22 10:49 test3\n"
+        expected2 = "drwxr-xr-x 3 djulian djulian 4096 2020-04-22 12:28 path\ndrwxr-xr-x 2 djulian djulian 4096 2020-04-22 10:49 test3\n"
         output3 = subprocess.check_output("python3 ls.py -l ./tests/path/to/folder/", shell=True)
         expected3 = "-rwxr-xr-x 1 djulian djulian 0 2020-04-22 10:48 another_file\n-rwxr--r-- 1 djulian djulian 0 2020-04-22 10:48 some_file\n"        
         output4 = subprocess.check_output("python3 ls.py -l ./tests/path/t", shell=True)
